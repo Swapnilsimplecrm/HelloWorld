@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Import Excel</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+</head>
+
+<body>
+    <div>
+        <form name="import" id="import" enctype="multipart/form-data" >
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile01"
+                           aria-describedby="inputGroupFileAddon01">
+                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                </div>
+
+                <button type="button" id="btnImport" class="btn btn-primary">Import</button>
+            </div>
+        </form>
+
+        <table id="example" class="display" style="width:100%"></table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getJson();
+        });
+
+        $("#btnImport").click(function (e) {
+            e.preventDefault();
+            //var form = document.getElementById('import')
+            var formData = new FormData();
+            var fileInput = document.getElementById('inputGroupFile01');
+            var file = fileInput.files[0];
+            formData.append('file', file);
+
+            var xhr = new XMLHttpRequest();
+            // Add any event handlers here...
+            xhr.open('POST', 'ProcessExcel', true);
+            xhr.send(formData);
+        });
+
+
+
+        function getJson() {
+            var jsonT = "https://jsonblob.com/api/jsonBlob/ecfee6e9-8c6e-11e9-a0b1-434bd97e0a82";
+            $.getJSON(jsonT, function (dataSet) {
+                // alert(JSON.stringify(dataSet));
+                $('#example').DataTable({
+                    data: dataSet.data,
+                    columns: [
+                        { title: "Name" },
+                        { title: "Position" },
+                        { title: "Office" },
+                        { title: "Extn." },
+                        { title: "Start date" },
+                        { title: "Salary" }
+                    ]
+                });
+            });
+        }
+    </script>
+</body>
+</html>
